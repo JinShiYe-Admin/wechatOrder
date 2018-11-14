@@ -1,0 +1,645 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="js/libs/mui/mui.picker.css" />
+		<link rel="stylesheet" type="text/css" href="js/libs/mui/mui.poppicker.css" />
+		<link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.3/style/weui.min.css">
+		<link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.1/css/jquery-weui.min.css">
+		<style type="text/css">
+			.pay-btn {
+				border: #00CFBD;
+				background: #00CFBD;
+				height: 50px;
+				border-radius: 0;
+			}
+			
+			.stuTitle {
+				color: #333;
+				font-size: 15px;
+			}
+			
+			.mui-table-view {
+				margin-left: 20px;
+			}
+		</style>
+	</head>
+
+	<body style="background: white;">
+		<div class="mui-content" id="orderDetailData" style="background: white;">
+			<p style="text-align: center;font-size: 18px;margin-top: 10px;color: #333;">{{schName}}</p>
+			<p style="margin-left: 10px;margin-right: 10px;font-size: 14px;color: #666;">{{note}}</p>
+			<p style="height: 8px;background: #F2F2F2;"></p>
+			<div class="mui-input-row">
+				<label class="stuTitle">手机号</label>
+				<input id='inputTelephone' type="text" style="font-size: 14px;" v-model="telePhone" class="mui-input-clear mui-input" maxlength="11" placeholder="请输入家长手机号码" onKeyUp="value=value.replace(/[^\d]/g,'')">
+			</div>
+			<p style="height: 1px;background: #F2F2F2;;"></p>
+			<div class="mui-input-row">
+				<label class="stuTitle">学生所在班级</label>
+			</div>
+			<p style="height: 1px;background: #F2F2F2;;"></p>
+			<ul class="mui-table-view" style="margin-top: -10px;">
+				<li class="mui-table-view-cell">
+					<a class="stuTitle">
+						年级
+						<input type="text" class="mui-input-clear mui-input" placeholder="请选择年级" style="width: 70%;margin-top: -10px;margin-bottom: -10px;border: 0px;font-size: 14px;" readonly="readonly" @click="clickTable(0)" v-model=grideName>
+						<img @click="clickTable(0)" style="width: 40px;height: 40px;margin-top: -11px;margin-bottom: -14px;" src="img/img.png" />
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="stuTitle">
+						班级
+						<input type="text" class="mui-input-clear mui-input" placeholder="请选择班级" style="width: 70%;margin-top: -10px;margin-bottom: -10px;border: 0px;font-size: 14px;" readonly="readonly" @click="clickTable(1)" v-model=clsName>
+						<img @click="clickTable(0)" style="width: 40px;height: 40px;margin-top: -11px;margin-bottom: -14px;" src="img/img.png" />
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a v-if="userStuList.length>0" class="stuTitle">
+						姓名
+						<input type="text" class="mui-input-clear mui-input" placeholder="请选择学生" style="width: 70%;margin-top: -10px;margin-bottom: -10px;border: 0px;font-size: 14px;" v-model=stuName>
+						<img @click="clickTable(0)" style="width: 40px;height: 40px;margin-top: -11px;margin-bottom: -14px;" src="img/img.png" />
+					</a>
+					<a v-else="" class="stuTitle">
+						姓名
+						<input id="stuName" type="text" class="mui-input-clear mui-input" maxlength="10" placeholder="请输入学生姓名,10字以内" style="width: 70%;margin-top: -10px;margin-bottom: -10px;border: 0px;font-size: 14px;" v-model=stuName>
+					</a>
+				</li>
+			</ul>
+			<button type="button" @click="clickPay" class="mui-btn pay-btn mui-btn-block" :disabled="isDisabled" style="width: 80%;margin-left: 10%;margin-top: 10px;">确定</button>
+		</div>
+
+		<script src="js/mui.min.js"></script>
+		<script src="js/libs/vconsole.min.js"></script>
+		<script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/jquery-weui/1.2.1/js/jquery-weui.min.js"></script>
+
+		<script src="js/libs/vue.js"></script>
+		<script src="js/libs/storageKeyName.js"></script>
+		<!--加密-->
+		<script src="js/libs/RSA/Barrett.js" charset="utf-8"></script>
+		<script src="js/libs/RSA/BigInt.js" charset="utf-8"></script>
+		<script src="js/libs/RSA/RSA.js" charset="utf-8"></script>
+		<script src="js/libs/RSAEncrypt.js" charset="utf-8"></script>
+		<!---->
+		<script src='js/libs/crypto-js/require.js'></script>
+		<script src='js/libs/signHmacSHA1.js'></script>
+		<script src='js/libs/sortSign.js'></script>
+		<script src="js/libs/publicProtocolNew.js"></script>
+		<script src="js/libs/utils.js"></script>
+		<script src="js/libs/store.js"></script>
+		<script src="js/libs/mui/mui.picker.js"></script>
+		<script src="js/libs/mui/mui.poppicker.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			var tempModel = {};
+			var userPicker;
+			var grdClsPicker;
+			window.onload = function() {
+				console.log('页面url:' + window.location.href);
+								orderDetailData.schoolID = getParam('schoolId');
+//				orderDetailData.schoolID = '100255';
+				orderDetailData.schName = getParam('schoolName');
+				orderDetailData.serviceName = getParam('serviceName');
+				orderDetailData.totalFee = getParam('totalfee') * 100;
+				orderDetailData.month = getParam('month');
+				orderDetailData.note = getParam('note');
+				orderDetailData.fcodes = getParam('fcodes');
+				orderDetailData.orderID = getParam('serviceId');
+				console.log('页面参数schoolID:' + orderDetailData.schoolID + ',' + orderDetailData.schName + ',' + orderDetailData.serviceName + ',' + orderDetailData.totalFee + ',' + orderDetailData.month + ',' + orderDetailData.note);
+				tempModel = {
+					uuid: 'deviceuuid',
+					appid: 'runtimeappid'
+				}
+				//login登录
+				loginPro('00000000000', '000000');
+				//弹出
+				userPicker = new mui.PopPicker();
+				grdClsPicker = new mui.PopPicker({
+					layer: 2
+				});
+			};
+
+			//截取url数据方法
+			var getParam = function(name) {
+				var search = document.location.search;
+				//alert(search);
+				var pattern = new RegExp("[?&]" + name + "\=([^&]+)", "g");
+				var matcher = pattern.exec(search);
+				var items = null;
+				if(null != matcher) {
+					try {
+						items = decodeURIComponent(decodeURIComponent(matcher[1]));
+					} catch(e) {
+						try {
+							items = decodeURIComponent(matcher[1]);
+						} catch(e) {
+							items = matcher[1];
+						}
+					}
+				}
+				return items;
+			};
+
+			var sureBtn = function() {
+				if(orderDetailData.telePhone.length == 11 && orderDetailData.grideName.length > 0 && orderDetailData.grideName.length > 0 && orderDetailData.clsName.length > 0 && orderDetailData.stuName.length > 0 && orderDetailData.stuName.length < 11) {
+					orderDetailData.isDisabled = false;
+				} else {
+					orderDetailData.isDisabled = true;
+				}
+			}
+
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg); //search,查询？后面的参数，并匹配正则
+				if(r != null) return unescape(r[2]);
+				return null;
+			}
+
+			var orderDetailData = new Vue({
+				el: "#orderDetailData",
+				data: {
+					orderFlag: '0', //0没有订购该套餐，1已经订购
+					schoolID: '', //学校id
+					schName: '', //学校名称
+					serviceName: '', //订单名称
+					totalFee: '', //总钱数
+					month: '', //月数
+					note: '', //备注
+					fcodes: '', //功能代码串
+					orderID: '', //套餐id
+					userStuList: [], //关联的学生
+					gradeClassList: [], //如果没有关联学生，获取这个学校所有的年级、班级
+					isDisabled: true, //确定按钮是否可以点击
+					telePhone: '', //电话号码
+					telePhoneTemp: '', //
+					grideName: '', //年级名称
+					clsID: '', //班级id
+					clsName: '', //班级名称
+					stuID: '', //学生id
+					stuName: '' //学生姓名
+				},
+				methods: {
+					clickTable: function(index) {
+						console.log('index:' + index);
+						if(orderDetailData.telePhone == '' || orderDetailData.telePhone.length < 11) {
+							//							this. c = false;
+							mui.toast('请先输入手机号获取数据');
+						} else {
+							if(orderDetailData.orderFlag == 0) {
+								if(orderDetailData.userStuList.length == 0) {
+									if(orderDetailData.gradeClassList.length == 0) {
+										mui.toast('学校无班级，请联系班主任');
+									} else {
+										var tempArray = [];
+										tempArray = [].concat(orderDetailData.gradeClassList);
+										console.log('tempArray:' + JSON.stringify(tempArray));
+										grdClsPicker.setData(tempArray);
+										grdClsPicker.show(function(items) {
+											console.log('items:' + JSON.stringify(items[0]));
+											var tempModel1 = items[0];
+											orderDetailData.grideName = tempModel1.grdname;
+											var tempModel2 = items[1];
+											orderDetailData.clsName = tempModel2.clsname;
+											orderDetailData.clsID = tempModel2.classid;
+											//									orderDetailData.stuName = '';
+											//									orderDetailData.stuID = '0';
+											sureBtn();
+										});
+									}
+								} else {
+									var tempArray = [];
+									tempArray = [].concat(orderDetailData.userStuList);
+									userPicker.setData(tempArray);
+									userPicker.show(function(items) {
+										console.log('items:' + JSON.stringify(items[0]));
+										var tempModel1 = items[0];
+										orderDetailData.grideName = tempModel1.grdname;
+										orderDetailData.clsName = tempModel1.clsname;
+										orderDetailData.stuName = tempModel1.stuname;
+										orderDetailData.clsID = tempModel1.classid;
+										orderDetailData.stuID = tempModel1.stuid;
+										sureBtn();
+									});
+								}
+							} else {
+								mui.toast('您已订购该套餐');
+							}
+						}
+					},
+					clickPay: function() {
+						//传递的参数
+						var tempArr = [];
+						tempArr.push(orderDetailData.telePhone); //订购的电话号码
+						tempArr.push(orderDetailData.orderID); //套餐代码
+						tempArr.push(orderDetailData.month); //订购总月数
+						tempArr.push(orderDetailData.totalFee); //订购花费
+						tempArr.push(orderDetailData.schoolID); //学校ID
+						tempArr.push(orderDetailData.clsID); //班级ID
+						tempArr.push(orderDetailData.stuID); //学生ID，学生ID,如果是添加的学生时填写0
+						tempArr.push(orderDetailData.stuName); //学生名称，学生名称,必填,不超过10个字
+						var tempStr = tempArr.join('~');
+						var tempModel000 = {
+							body: orderDetailData.serviceName, //商品名称
+							attach: '', //附加描述,最好填写,以区分
+							total_fee: orderDetailData.totalFee, //商品总价,人民币商品总价,以分为单位
+							goods_tag: '', //商品标签,商品分类标签,根据实际情况填写
+							rdir: 'http://192.168.1.203:8080/wechatOrder/index2.html', //回调页面地址,填写回调的处理页面
+							rdata: tempStr //回调参数,填写回调的参数
+						}
+						var url = 'https://jsypay.jiaobaowang.net/jsypay/wxpay/sys/WebPayServer.aspx?v=' + Math.random() + '&body=' + tempModel000.body + '&attach=' + tempModel000.attach + '&rdata=' + tempModel000.rdata + '&total_fee=' + tempModel000.total_fee + '&goods_tag=' + tempModel000.goods_tag + '&rdir=' + tempModel000.rdir;
+						console.log('url:' + url);
+						mui.openWindow({
+							url: url,
+							id: 'WebPayServer.aspx'
+						});
+					}
+				}
+			});
+
+			//输入电话号码时，计算字符长度
+			$("#inputTelephone").bind('input propertychange', function() {
+				var summary = $(this).val();
+				console.log('summary0:' + summary);
+				var phoneDiv = document.getElementById("inputTelephone");
+				if(summary.length == 11) {
+					document.activeElement.blur();
+				}
+				if(orderDetailData.telePhoneTemp == phoneDiv.value) {
+
+				} else {
+					orderDetailData.telePhoneTemp = phoneDiv.value;
+					if(isNumber(summary)) {
+						if(summary.length == 11) {
+							getUserBusFunc();
+							console.log('发送请求协议');
+						}
+					} else {
+						console.log('发送请求协议2222222222');
+						document.activeElement.blur();
+						phoneDiv.value = phoneDiv.value.substr(0, phoneDiv.value.length - 1);
+						mui.toast('请输入正确的手机号码');
+					}
+				}
+			});
+
+			//输入姓名时，计算字符长度
+			$("#stuName").bind('input propertychange', function() {
+				var summary11 = $(this).val();
+				console.log('summary11:' + summary11);
+				if(summary11.length > 0 && summary11.length <= 10) {
+					sureBtn();
+				}
+				if(summary11.length > 10) {
+					mui.toast('姓名不能超过10个字');
+					sureBtn();
+				}
+				if(summary11.length == 0) {
+					sureBtn();
+				}
+			});
+
+			function isNumber(val) {
+				var regPos = /^\d+(\d+)?$/;
+				var regNeg = /^(-(([0-9]+[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+				if(regPos.test(val) || regNeg.test(val)) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			//4.1.用户已订购套餐及功能扩展栏目
+			function getUserBusFunc() {
+				$.showLoading("数据加载中");
+				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				var enData1 = {};
+				//不需要加密的数据
+				var comData1 = {
+					uuid: tempModel.uuid, //用户设备号
+					uid: document.getElementById("inputTelephone").value, //用户账号
+					utoken: personal.utoken, //用户令牌
+					appid: tempModel.appid //系统所分配的应用ID
+				};
+				//发送网络请求，data为网络返回值
+				postDataEncry('GetUserBusFunc', enData1, comData1, 0, function(data1) {
+					console.log('GetUserBusFunc:' + JSON.stringify(data1));
+					orderDetailData.orderFlag = 0;
+					$.hideLoading();
+					if(data1.RspCode == 0) {
+						if(data1.RspData) {
+							var tempFlag = 0;
+							//循环找到对应的套餐代码数据
+							for(var i = 0; i < data1.RspData.userbus.length; i++) {
+								var orderModel = data1.RspData.userbus[i];
+								console.log('orderModel.servid:' + orderModel.servid + ',' + orderDetailData.orderID);
+								if(orderModel.servid == orderDetailData.orderID) {
+									console.log('orderModel.servid:' + orderModel.servid);
+									tempFlag++;
+								}
+							}
+							if(tempFlag == 0) {
+								getUserMstu();
+							} else {
+								orderDetailData.orderFlag = 1;
+								mui.toast('您已订购该套餐');
+							}
+						} else {
+							getUserMstu();
+						}
+					} else {
+						mui.toast(data1.RspTxt);
+					}
+				});
+			}
+
+			//4.7.获取用户手机关联的学生列表--获取可以进行绑定的学生
+			function getUserMstu() {
+				$.showLoading("数据加载中");
+				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				var enData1 = {};
+				//不需要加密的数据
+				var comData1 = {
+					uuid: tempModel.uuid, //用户设备号
+					uid: document.getElementById("inputTelephone").value, //用户账号
+					utoken: personal.utoken, //用户令牌
+					appid: tempModel.appid //系统所分配的应用ID
+				};
+				//发送网络请求，data为网络返回值
+				postDataEncry('UserMstu', enData1, comData1, 0, function(data1) {
+					console.log('4.6.UserMstu:' + JSON.stringify(data1));
+					$.hideLoading();
+					if(data1.RspCode == 0) {
+						if(data1.RspData) {
+							var tempArr = [];
+							for(var i = 0; i < data1.RspData.stus.length; i++) {
+								var tempStuModel = data1.RspData.stus[i];
+								if(tempStuModel.schid == orderDetailData.schoolID) {
+									tempStuModel.selectStu = 0;
+									if(tempStuModel.sex == 0) {
+										tempStuModel.sexName = '女';
+									} else {
+										tempStuModel.sexName = '男';
+									}
+									tempStuModel.value = tempStuModel.stuid;
+									tempStuModel.text = tempStuModel.schname + tempStuModel.grdname + tempStuModel.clsname + tempStuModel.stuname + '(' + tempStuModel.sexName + ')';
+									tempArr.push(tempStuModel);
+								}
+							}
+							orderDetailData.userStuList = [].concat(tempArr);
+							console.log('orderDetailData.userStuList:' + JSON.stringify(orderDetailData.userStuList));
+							if(orderDetailData.userStuList.length > 0) {
+								orderDetailData.grideName = orderDetailData.userStuList[0].grdname;
+								orderDetailData.clsName = orderDetailData.userStuList[0].clsname;
+								orderDetailData.clsID = orderDetailData.userStuList[0].classid;
+								orderDetailData.stuName = orderDetailData.userStuList[0].stuname;
+								orderDetailData.stuID = orderDetailData.userStuList[0].stuid;
+								sureBtn();
+							} else {
+								if(orderDetailData.gradeClassList.length == 0) {
+									//获取学校年级
+									getSchGrade();
+								} else {
+									grdClsPicker = new mui.PopPicker({
+										layer: 2
+									});
+									orderDetailData.grideName = orderDetailData.gradeClassList[0].grdname;
+									orderDetailData.clsName = orderDetailData.gradeClassList[0].children[0].clsname;
+									orderDetailData.clsID = orderDetailData.gradeClassList[0].children[0].clsid;
+									orderDetailData.stuName = '';
+									orderDetailData.stuID = '0';
+									sureBtn();
+								}
+							}
+						} else {
+							orderDetailData.userStuList = [];
+							if(orderDetailData.gradeClassList.length == 0) {
+								//获取学校年级
+								getSchGrade();
+							} else {
+								grdClsPicker = new mui.PopPicker({
+									layer: 2
+								});
+								orderDetailData.grideName = orderDetailData.gradeClassList[0].grdname;
+								orderDetailData.clsName = orderDetailData.gradeClassList[0].children[0].clsname;
+								orderDetailData.clsID = orderDetailData.gradeClassList[0].children[0].clsid;
+								orderDetailData.stuName = '';
+								orderDetailData.stuID = '0';
+								sureBtn();
+							}
+						}
+					} else {
+						mui.toast(data1.RspTxt);
+					}
+				});
+			}
+
+			//获取学校年级
+			var getSchGrade = function() {
+				$.showLoading("数据加载中");
+				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				var enData0 = {};
+				//不需要加密的数据
+				var comData0 = {
+					uuid: tempModel.uuid, //用户设备号
+					utoken: personal.utoken, //用户令牌
+					isfinish: 0, //是否已毕业,0未毕业,1已毕业,-1全部
+					appid: tempModel.appid //系统所分配的应用ID
+				}
+				//2.1 学校年级
+				postDataEncry('SchGrade', enData0, comData0, 0, function(data) {
+					console.log('2.1 学校年级:' + JSON.stringify(data));
+					$.hideLoading();
+					if(data.RspCode == 0) {
+						if(data.RspData) {
+							var tempSchGrd = [];
+							for(var i = 0; i < data.RspData.grds.length; i++) {
+								var tempModel1 = data.RspData.grds[i];
+								if(tempModel1.grdid > 0) {
+									tempModel1.text = tempModel1.grdname;
+									tempModel1.value = tempModel1.grdid;
+									tempModel1.children = [];
+									tempSchGrd.push(tempModel1);
+								}
+							}
+							orderDetailData.gradeClassList = [].concat(tempSchGrd);
+							//获取年级下班级
+							getGradeClass();
+							sureBtn();
+						} else {
+
+						}
+					} else {
+						mui.toast(data.RspTxt, "cancel");
+					}
+				});
+			}
+
+			//获取年级下班级
+			var getGradeClass = function() {
+				$.showLoading("数据加载中");
+				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				var tempGradeId = []; //需要查询的年级ID
+				for(var i = 0; i < orderDetailData.gradeClassList.length; i++) {
+					var tempModel1 = orderDetailData.gradeClassList[i];
+					tempGradeId.push(tempModel1.grdid);
+				}
+				var enData0 = {};
+				//不需要加密的数据
+				var comData0 = {
+					uuid: tempModel.uuid, //用户设备号
+					utoken: personal.utoken, //用户令牌
+					gradeids: tempGradeId.join(','), //需要查询的年级ID，多个代码用英文逗号隔开
+					appid: tempModel.appid //系统所分配的应用ID
+				}
+				//2.3 学校年级下班级
+				postDataEncry('GradeClass', enData0, comData0, 0, function(data) {
+					console.log('2.3 学校年级下班级:' + JSON.stringify(data));
+					$.hideLoading();
+					if(data.RspCode == 0) {
+						if(data.RspData) {
+							//去重
+							data.RspData.clss = data.RspData.clss.unique('clsid');
+							//将获取到的班级，塞到对应的年级数组
+							for(var i = 0; i < data.RspData.clss.length; i++) {
+								var tempClss = data.RspData.clss[i];
+								for(var a = 0; a < orderDetailData.gradeClassList.length; a++) {
+									var tempModel1 = orderDetailData.gradeClassList[a];
+									if(tempModel1.grdid == tempClss.grdid) {
+										tempClss.value = tempClss.clsid;
+										tempClss.text = tempClss.clsname;
+										tempModel1.children.push(tempClss);
+									}
+								}
+							}
+							console.log('获取到班级后合并:' + JSON.stringify(orderDetailData.gradeClassList));
+							//将年级下没有班级的数据去除
+							var tempArray = [];
+							for(var i = 0; i < orderDetailData.gradeClassList.length; i++) {
+								var tempModel2 = orderDetailData.gradeClassList[i];
+								if(tempModel2.children.length > 0) {
+									tempArray.push(tempModel2);
+								}
+							}
+							orderDetailData.gradeClassList = [].concat(tempArray);
+							orderDetailData.grideName = orderDetailData.gradeClassList[0].grdname;
+							orderDetailData.clsName = orderDetailData.gradeClassList[0].children[0].clsname;
+							orderDetailData.clsID = orderDetailData.gradeClassList[0].children[0].clsid;
+							orderDetailData.stuName = '';
+							orderDetailData.stuID = '0';
+							sureBtn();
+						} else {
+							orderDetailData.gradeClassList = [];
+						}
+					}
+				});
+			}
+
+			//login登录
+			var loginPro = function(tempName, tempPW) {
+				//握手
+				var enData0 = {};
+				//不需要加密的数据
+				var comData0 = {
+					uuid: tempModel.uuid, //用户设备号
+					shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
+					appid: tempModel.appid //系统所分配的应用ID
+				};
+				$.showLoading("数据加载中");
+				//发送网络请求，data为网络返回值
+				postDataEncry('ShakeHand', enData0, comData0, 0, function(data) {
+					console.log('2121212');
+					if(data.RspCode == 0) {
+						$.showLoading("数据加载中");
+						store.set(window.storageKeyName.SHAKEHAND, data.RspData);
+						var enData1 = {
+							uid: tempName, //用户账号
+							pw: tempPW //用户密码
+						};
+						//不需要加密的数据
+						var comData1 = {
+							uuid: tempModel.uuid, //用户设备号
+							shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
+							appid: tempModel.appid, //系统所分配的应用ID
+							schid: orderDetailData.schoolID, //学校ID
+							utp: storageKeyName.USERTYPE //用户类型，0老师,1家长,2学生
+						};
+						//登录
+						postDataEncry('Login', enData1, comData1, 0, function(data1) {
+							$.hideLoading();
+							if(data1.RspCode == 0) {
+								loginFlag = 1;
+								if(data1.RspData.dpts == null) {
+									data1.RspData.dpts = [];
+								}
+								if(data1.RspData.grds == null) {
+									data1.RspData.grds = [];
+								}
+								if(data1.RspData.clss == null) {
+									data1.RspData.clss = [];
+								}
+								if(data1.RspData.subs == null) {
+									data1.RspData.subs = [];
+								}
+								if(data1.RspData.urolestr == null) {
+									data1.RspData.urolestr = '00000000000000000000000000000';
+								}
+								data1.RspData.userName0 = tempName;
+								data1.RspData.password0 = tempPW;
+								data1.RspData.isBdCount = 0; //套餐是否绑定学生
+								data1.RspData.packageCount = 0; //套餐是否绑定
+								var model_area = {
+									procode: '00', //省份code，自己添加的参数
+									proname: '全国', //省份名称，自己添加的参数
+									acode: '000000', //节点代码,通用6位,前两位为省份编码,中间两位为城市编码,后两位为区县编码--城市代码
+									aname: '全国', //节点名称--城市名称
+									atype: '' //节点类型,0省1城市2区县
+								}
+								data1.RspData.uarea = model_area; //用户区域,省代码 市代码|省名称 市名称
+								console.log('data1.RspData:' + JSON.stringify(data1.RspData));
+								store.set(window.storageKeyName.PERSONALINFO, data1.RspData);
+								var personal = store.get(window.storageKeyName.PERSONALINFO);
+								console.log('personal0001:' + JSON.stringify(personal));
+							} else {
+								mui.toast(data1.RspTxt);
+							}
+						});
+					} else {
+						$.hideLoading();
+						mui.toast(data.RspTxt);
+					}
+				});
+			}
+
+			//给数组去重
+			Array.prototype.unique = function(key) {
+				var arr = this;
+				var n = [arr[0]];
+				for(var i = 1; i < arr.length; i++) {
+					if(key === undefined) {
+						if(n.indexOf(arr[i]) == -1) n.push(arr[i]);
+					} else {
+						inner: {
+							var has = false;
+							for(var j = 0; j < n.length; j++) {
+								if(arr[i][key] == n[j][key]) {
+									has = true;
+									break inner;
+								}
+							}
+						}
+						if(!has) {
+							n.push(arr[i]);
+						}
+					}
+				}
+				return n;
+			}
+		</script>
+	</body>
+
+</html>
