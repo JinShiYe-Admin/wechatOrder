@@ -61,7 +61,7 @@
 			}
 			window.onload = function() {
 				console.log('页面index2:url:' + window.location.href);
-				alert('页面url:' + window.location.href);
+//				alert('页面url:' + window.location.href);
 				//获取传值
 				selfValue = getUrlParam('rdata');
 				var tempArr = selfValue.split('~');
@@ -77,7 +77,7 @@
 				orderResult = getUrlParam('msg');
 				console.log('selfValue:' + selfValue + ',orderNum:' + orderNum + ',orderResult:' + orderResult);
 				if(orderResult == "get_brand_wcpay_request:ok") {
-					alert('0000');
+//					alert('0000');
 					getPayResult();
 				} else if(orderResult == "get_brand_wcpay_request:cancel") {
 					mui.toast('支付过程中用户取消');
@@ -126,14 +126,14 @@
 						console.log("payResult" + data)
 						if(data1.RspCode == 0 && data1.RspData.qrurl == 'SUCCESS') {
 							console.log('payResult success');
-							alert('0001');
+//							alert('0001');
 							getUserBusFunc();
 						} else {
-							alert('0002');
+//							alert('0002');
 							getPayResult();
 						}
 					} else {
-						alert('0003');
+//						alert('0003');
 						getPayResult();
 					}
 				}
@@ -202,15 +202,15 @@
 				//发送网络请求，data为网络返回值
 				postDataEncry('UserQRFee', enData1, comData1, 0, function(data1) {
 					console.log('UserQRFee:' + JSON.stringify(data1));
-					alert('0004');
+//					alert('0004');
 					$.hideLoading();
 					if(data1.RspCode == 0) {
-						alert('0005');
+//						alert('0005');
 						orderResultData.orderFlag = 0;
 						$('#div111').show();
 						$('#div112').hide();
 					} else {
-						alert('0006');
+//						alert('0006');
 						orderResultData.orderFlag = 1;
 						mui.toast(data1.RspTxt);
 						$('#div112').show();
