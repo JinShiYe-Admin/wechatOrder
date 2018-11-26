@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+
+		<div class="mui-content" id="app">
+			<todo-item v-for='item in tempList' :todo='item' :key='item.id'></todo-item>
+		</div>
+		<div id='example-3'>
+			<input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+			<label for="jack">Jack</label>
+			<input type="checkbox" id="john" value="John" v-model="checkedNames">
+			<label for="john">John</label>
+			<input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+			<label for="mike">Mike</label>
+			<br>
+			<span>Checked names: {{ checkedNames }}</span>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/libs/vconsole.min.js"></script>
+		<script src="js/libs/vue.js"></script>
+		<!--<script src="tempIndex4.js"></script>-->
+		<script type="text/javascript">
+			mui.init()
+			new Vue({
+				el: '#example-3',
+				data: {
+					checkedNames: ['John','Jack']
+				}
+			})
+			Vue.component('todo-item', {
+				props: ['todo'],
+				template: '<li>This is a todo {{todo.text}}</li>'
+			})
+
+			var app = new Vue({
+				el: '#app',
+				data: {
+					a: 111,
+					tempList: [{
+							id: 0,
+							text: '蔬菜'
+						},
+						{
+							id: 1,
+							text: '奶酪'
+						},
+						{
+							id: 2,
+							text: '随便其它什么人吃的东西'
+						}
+					]
+				},
+				created: function() {
+					// `this` 指向 vm 实例
+					console.log('a is: ' + this.a)
+				}
+			})
+		</script>
+	</body>
+
+</html>

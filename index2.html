@@ -12,8 +12,7 @@
 
 	<body>
 		<div class="mui-content" id="orderResultData">
-			<p>url:{{winUrl}}</p>
-			<div class="" v-if="orderFlag == 0">
+			<div id="div111" style="display: none;">
 				<div class="" style="text-align: center;">
 					<img style="height: 54px;width: 54px;margin-top: 40px;" src="img/img1.png" />
 				</div>
@@ -22,7 +21,7 @@
 				<p style="text-align: center;font-size: 14px;margin-top: 20px;color: #333;">初次登录初始密码为：123456</p>
 				<p style="text-align: center;font-size: 14px;margin-top: 20px;color: #333;">请在应用商店下载“校讯通”APP进行使用</p>
 			</div>
-			<div class="" v-else-if="orderFlag == 1">
+			<div id="div112" style="display: none;">
 				<div class="" style="text-align: center;">
 					<img style="height: 54px;width: 54px;margin-top: 40px;" src="img/img2.png" />
 				</div>
@@ -78,20 +77,25 @@
 				orderResult = getUrlParam('msg');
 				console.log('selfValue:' + selfValue + ',orderNum:' + orderNum + ',orderResult:' + orderResult);
 				if(orderResult == "get_brand_wcpay_request:ok") {
+					alert('0000');
 					getPayResult();
 				} else if(orderResult == "get_brand_wcpay_request:cancel") {
 					mui.toast('支付过程中用户取消');
 					orderResultData.orderFlag = 1;
+					$('#div112').show();
+					$('#div111').hide();
 				} else if(orderResult == "get_brand_wcpay_request:fail") {
 					mui.toast('支付失败');
 					orderResultData.orderFlag = 1;
+					$('#div112').show();
+					$('#div111').hide();
 				}
 			}
 
 			var orderResultData = new Vue({
 				el: "#orderResultData",
 				data: {
-					winUrl:window.location.href,
+					winUrl: window.location.href,
 					orderFlag: 9, //0支付成功，1支付失败
 					phoneNum: '', //电话号码
 					orderID: '', //订单id
@@ -122,11 +126,14 @@
 						console.log("payResult" + data)
 						if(data1.RspCode == 0 && data1.RspData.qrurl == 'SUCCESS') {
 							console.log('payResult success');
+							alert('0001');
 							getUserBusFunc();
 						} else {
+							alert('0002');
 							getPayResult();
 						}
 					} else {
+						alert('0003');
 						getPayResult();
 					}
 				}
@@ -134,11 +141,15 @@
 					$.hideLoading();
 					console.log("XHRP:ontimeout222:", e);
 					orderResultData.orderFlag = 1;
+					$('#div112').show();
+					$('#div111').hide();
 				};
 				xhr.onerror = function(e) {
 					$.hideLoading();
 					console.log("XHRP:onerror111:", e);
 					orderResultData.orderFlag = 1;
+					$('#div112').show();
+					$('#div111').hide();
 				};
 				xhr.send(JSON.stringify(data0));
 			}
@@ -191,12 +202,19 @@
 				//发送网络请求，data为网络返回值
 				postDataEncry('UserQRFee', enData1, comData1, 0, function(data1) {
 					console.log('UserQRFee:' + JSON.stringify(data1));
+					alert('0004');
 					$.hideLoading();
 					if(data1.RspCode == 0) {
+						alert('0005');
 						orderResultData.orderFlag = 0;
+						$('#div111').show();
+						$('#div112').hide();
 					} else {
+						alert('0006');
 						orderResultData.orderFlag = 1;
 						mui.toast(data1.RspTxt);
+						$('#div112').show();
+						$('#div111').hide();
 					}
 				});
 			}

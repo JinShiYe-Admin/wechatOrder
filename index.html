@@ -66,7 +66,7 @@
 					</a>
 					<a v-else="" class="stuTitle">
 						姓名
-						<input id="stuName" type="text" class="mui-input-clear mui-input" maxlength="10" placeholder="请输入学生姓名,10字以内" style="width: 70%;margin-top: -10px;margin-bottom: -10px;border: 0px;font-size: 14px;" v-model=stuName>
+						<input id="stuName" type="text" class="mui-input-clear mui-input" maxlength="8" placeholder="请输入学生姓名,8字以内" style="width: 70%;margin-top: -10px;margin-bottom: -10px;border: 0px;font-size: 14px;" v-model=stuName>
 					</a>
 				</li>
 			</ul>
@@ -205,7 +205,7 @@
 											orderDetailData.grideName = tempModel1.grdname;
 											var tempModel2 = items[1];
 											orderDetailData.clsName = tempModel2.clsname;
-											orderDetailData.clsID = tempModel2.classid;
+											orderDetailData.clsID = tempModel2.clsid;
 											//									orderDetailData.stuName = '';
 											//									orderDetailData.stuID = '0';
 											sureBtn();
@@ -242,6 +242,7 @@
 						tempArr.push(orderDetailData.clsID); //班级ID
 						tempArr.push(orderDetailData.stuID); //学生ID，学生ID,如果是添加的学生时填写0
 						tempArr.push(orderDetailData.stuName); //学生名称，学生名称,必填,不超过10个字
+						tempArr.push(Math.random()); //随机数
 						var tempStr = tempArr.join('~');
 						var tempModel000 = {
 							body: orderDetailData.serviceName, //商品名称
@@ -255,7 +256,7 @@
 						console.log('url:' + url);
 						mui.openWindow({
 							url: url,
-							id: 'WebPayServer.aspx'
+							id: 'WebPayServer.aspx'+ Math.random()
 						});
 					}
 				}
@@ -291,11 +292,11 @@
 			$("#stuName").bind('input propertychange', function() {
 				var summary11 = $(this).val();
 				console.log('summary11:' + summary11);
-				if(summary11.length > 0 && summary11.length <= 10) {
+				if(summary11.length > 0 && summary11.length <= 8) {
 					sureBtn();
 				}
-				if(summary11.length > 10) {
-					mui.toast('姓名不能超过10个字');
+				if(summary11.length > 8) {
+					mui.toast('姓名不能超过8个字');
 					sureBtn();
 				}
 				if(summary11.length == 0) {
