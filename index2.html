@@ -111,7 +111,7 @@
 			//获取支付结果
 			var getPayResult = function() {
 				$.showLoading("数据加载中");
-				var url = 'http://jsypay.jiaobaowang.net/jsypay/wxpay/sys/PcQRCode.aspx';
+				var url = window.storageKeyName.PAYTESULT;
 				var data0 = {
 					out_trade_no: orderNum //订单编号
 				}

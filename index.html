@@ -249,10 +249,10 @@
 							attach: '', //附加描述,最好填写,以区分
 							total_fee: orderDetailData.totalFee, //商品总价,人民币商品总价,以分为单位
 							goods_tag: '', //商品标签,商品分类标签,根据实际情况填写
-							rdir: 'http://192.168.1.203:8080/wechatOrder/index2.html', //回调页面地址,填写回调的处理页面
+							rdir: window.storageKeyName.RETURNURL, //回调页面地址,填写回调的处理页面
 							rdata: tempStr //回调参数,填写回调的参数
 						}
-						var url = 'https://jsypay.jiaobaowang.net/jsypay/wxpay/sys/WebPayServer.aspx?v=' + Math.random() + '&body=' + tempModel000.body + '&attach=' + tempModel000.attach + '&rdata=' + tempModel000.rdata + '&total_fee=' + tempModel000.total_fee + '&goods_tag=' + tempModel000.goods_tag + '&rdir=' + tempModel000.rdir;
+						var url = window.storageKeyName.UPPAY+'?v=' + Math.random() + '&body=' + tempModel000.body + '&attach=' + tempModel000.attach + '&rdata=' + tempModel000.rdata + '&total_fee=' + tempModel000.total_fee + '&goods_tag=' + tempModel000.goods_tag + '&rdir=' + tempModel000.rdir;
 						console.log('url:' + url);
 						mui.openWindow({
 							url: url,

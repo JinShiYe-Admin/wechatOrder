@@ -15,58 +15,19 @@ var storageKeyName = (function(mod) {
 	}
 	switch(mod.key) {
 		case 0: //开发
-			mod.SCHOOLID = 100005;//学校ID
-//			mod.SCHOOLID = 0;//学校ID
 			mod.USERTYPE = 0;//用户类型，0老师,1家长,2学生
 			mod.INTERFACEGU = 'https://jsypay.jiaobaowang.net/useradminwebapi/api/data/';//顾工接口
-			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net/SchoolCommunicationService/';//孔工接口
-			mod.TEACHERIMG = 'http://jsypay.jiaobaowang.net/jsyadmin/upuserimg.ashx?userid='; //老师上传头像
-			mod.ANDROIDUPDATEURL='http://192.168.1.121:8081/app/versionCode.xml';//安卓升级地址
-			mod.WXPAYSERVER='http://jsypay.jiaobaowang.net/jsypay/wxpay/sys/AppServer.aspx';//微信支付地址
-			mod.ALIPAYSERVER='http://192.168.1.121:8081/app/versionCode.xml';//支付宝支付地址
-			mod.SEARCHPAYSESULT='http://jsypay.jiaobaowang.net/jsypay/wxpay/sys/PcQRCode.aspx';//获取支付结果的地址
-			//---开发---start---
-			mod.MAINEDU = 'https://jbyc.jiaobaowang.net:8442/'; //科教图片url
-			mod.MAINURL = 'https://jbyc.jiaobaowang.net:8442/api/CloudApi/'; //主url
-			mod.MAINJIAOXIAOURL = 'http://192.168.1.113:8081/JiaoBaoCloudService/'; //家校圈url
-			mod.MAINHOMEWORKURL = 'http://192.168.1.44:8513/'; //作业主url
-			mod.MAINQIUZHI = 'http://192.168.1.113:8081/JiaoBaoCloudService/'; //求知主url
-			mod.MAINMICROCLASS = 'http://192.168.1.113:8081/JiaoBaoCloudService/'; //微课主url
-			//---开发---end---
-			//---七牛空间和接口---开发---start---
-			mod.QNPB = 'https://qn-educds.jiaobaowang.net/'; //公开空间域名
-			mod.QNGETUPLOADTOKEN = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen';
-			mod.QNGETUPTOKENHEADIMGE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen'; //获取上传个人头像，群头像，资料头像到七牛的token的url
-			mod.QNGETUPTOKENFILE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen'; //获取上传文件（云存储）到七牛的token的url
-			mod.QNGETDOWNTOKENFILE = 'http://114.215.222.186:8004/Api/QiNiu/GetAccess'; //获取下载文件（云存储）的token的url，url+七牛文件url
-			mod.QNGETTOKENDELETE = 'http://114.215.222.186:8004/Api/QiNiu/Delete'; //获取批量（或者一个）删除七牛文件的token的url
+			mod.RETURNURL = '';//返回地址
+			mod.PAYTESULT = 'http://jsypay.jiaobaowang.net/jsypay/wxpay/sys/PcQRCode.aspx';//获取支付结果地址
+			mod.UPPAY = 'https://jsypay.jiaobaowang.net/jsypay/wxpay/sys/WebPayServer.aspx';//调起支付地址
 			//	---七牛空间和接口---开发---end---
 			break;
 		case 1: //部署外网
-//			mod.SCHOOLID = 100102;//学校ID
-			mod.SCHOOLID = 0;//学校ID
 			mod.USERTYPE = 0;//用户类型，0老师,1家长,2学生
 			mod.INTERFACEGU = 'https://zhxy.jiaobaowang.net:8515/schadminwebapi/api/data/';//顾工接口
-			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net:8443/SchoolCommunicationService/';//孔工接口
-			mod.TEACHERIMG = 'https://zhxy.jiaobaowang.net:8515/schadminwebadmin/upuserimg.ashx?userid='; //老师上传头像
-			mod.ANDROIDUPDATEURL='http://zhxy.jiaobaowang.net:8015/appupdate/xxt/versionCode.xml';//安卓升级地址
-			//---开发---start---
-			mod.MAINEDU = 'https://jbyc.jiaobaowang.net:8442/'; //科教图片url
-			mod.MAINURL = 'https://jbyc.jiaobaowang.net:8442/api/CloudApi/'; //主url
-			mod.MAINJIAOXIAOURL = 'http://192.168.1.113:8081/JiaoBaoCloudService/'; //家校圈url
-			mod.MAINHOMEWORKURL = 'http://192.168.1.44:8513/'; //作业主url
-			mod.MAINQIUZHI = 'http://192.168.1.113:8081/JiaoBaoCloudService/'; //求知主url
-			mod.MAINMICROCLASS = 'http://192.168.1.113:8081/JiaoBaoCloudService/'; //微课主url
-			mod.WXPAYSERVER='http://jsypay.jiaobaowang.net/jsypay/wxpay/sys/AppServer.aspx';//微信支付地址
-			mod.ALIPAYSERVER='http://192.168.1.121:8081/app/versionCode.xml';//支付宝支付地址
-			//---开发---end---
-			//---七牛空间和接口---开发---start---
-			mod.QNPB = 'https://qn-educds.jiaobaowang.net/'; //公开空间域名
-			mod.QNGETUPLOADTOKEN = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen';
-			mod.QNGETUPTOKENHEADIMGE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen'; //获取上传个人头像，群头像，资料头像到七牛的token的url
-			mod.QNGETUPTOKENFILE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen'; //获取上传文件（云存储）到七牛的token的url
-			mod.QNGETDOWNTOKENFILE = 'http://114.215.222.186:8004/Api/QiNiu/GetAccess'; //获取下载文件（云存储）的token的url，url+七牛文件url
-			mod.QNGETTOKENDELETE = 'http://114.215.222.186:8004/Api/QiNiu/Delete'; //获取批量（或者一个）删除七牛文件的token的url
+			mod.RETURNURL = '';//返回地址
+			mod.PAYTESULT = 'http://jsypay.jiaobaowang.net/jsypay/wxpay/sys/PcQRCode.aspx';//获取支付结果地址
+			mod.UPPAY = 'https://jsypay.jiaobaowang.net/jsypay/wxpay/sys/WebPayServer.aspx';//调起支付地址
 			//	---七牛空间和接口---开发---end---
 			break;
 		default:
