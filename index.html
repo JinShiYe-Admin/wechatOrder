@@ -276,8 +276,10 @@
 					orderDetailData.telePhoneTemp = phoneDiv.value;
 					if(isNumber(summary)) {
 						if(summary.length == 11) {
-							getUserBusFunc();
-							console.log('发送请求协议');
+							if(isPoneAvailable(summary)) {
+								getUserBusFunc();
+								console.log('发送请求协议');
+							}
 						}
 					} else {
 						console.log('发送请求协议2222222222');
@@ -304,12 +306,22 @@
 				}
 			});
 
-			function isNumber(val) {
+			function isPoneAvailable(str) {
 				var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
-				if(!myreg.test(val)) {
+				if(!myreg.test(str)) {
 					return false;
 				} else {
 					return true;
+				}
+			}
+
+			function isNumber(val) {
+				var regPos = /^\d+(\d+)?$/;
+				var regNeg = /^(-(([0-9]+[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+				if(regPos.test(val) || regNeg.test(val)) {
+					return true;
+				} else {
+					return false;
 				}
 			}
 
