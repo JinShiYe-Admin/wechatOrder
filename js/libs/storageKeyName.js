@@ -7,7 +7,7 @@ var storageKeyName = (function(mod) {
 	console.log = function(hint, object) {
 		if(mod.key === 0) {
 			var argus = hint;
-			if(typeof(object)!=='undefined') {
+			if(typeof(object) !== 'undefined') {
 				argus = hint + JSON.stringify(object);
 			}
 			exLog.apply(this, [argus]);
@@ -15,25 +15,23 @@ var storageKeyName = (function(mod) {
 	}
 	switch(mod.key) {
 		case 0: //开发
-			mod.USERTYPE = 0;//用户类型，0老师,1家长,2学生
-			mod.INTERFACEGU = 'https://jsypay.jiaobaowang.net/useradminwebapi/api/data/';//顾工接口
-//			mod.RETURNURL = 'http://192.168.1.203:8080/wechatOrder/index2.html';//返回地址，index2路径
-			mod.RETURNURL = 'http://baidu.com';//返回地址，index2路径
-			mod.PAYTESULT = 'http://jsypay.jiaobaowang.net/jsypay/wxpay/sys/PcQRCode.aspx';//获取支付结果地址
-			mod.UPPAY = 'https://jsypay.jiaobaowang.net/jsypay/wxpay/sys/WebPayServer.aspx';//调起支付地址
+			mod.USERTYPE = 0; //用户类型，0老师,1家长,2学生
+			mod.INTERFACEGU = 'https://jsypay.jiaobaowang.net/useradminwebapi/api/data/'; //顾工接口
+			mod.PAYTESULT = 'http://jsypay.jiaobaowang.net/jsypay/wxpay/sys/PcQRCode.aspx'; //获取支付结果地址
+			mod.UPPAY = 'https://jsypay.jiaobaowang.net/jsypay/wxpay/sys/WebPayServer.aspx'; //调起支付地址
 			break;
 		case 1: //部署外网
-			mod.USERTYPE = 0;//用户类型，0老师,1家长,2学生
-			mod.INTERFACEGU = 'https://zhxy.jiaobaowang.net:8515/schadminwebapi/api/data/';//顾工接口
-			mod.RETURNURL = '';//返回地址，index2路径
-			mod.PAYTESULT = 'http://jsypay.jiaobaowang.net/jsypay/wxpay/sys/PcQRCode.aspx';//获取支付结果地址
-			mod.UPPAY = 'https://jsypay.jiaobaowang.net/jsypay/wxpay/sys/WebPayServer.aspx';//调起支付地址
+			//地址必须都为https
+			mod.USERTYPE = 0; //用户类型，0老师,1家长,2学生
+			mod.INTERFACEGU = 'https://zhxy.jiaobaowang.net:8515/schadminwebapi/api/data/'; //顾工接口
+			mod.PAYTESULT = 'https://jsypay.jiaobaowang.net/jsypay/wxpay/sys/PcQRCode.aspx'; //获取支付结果地址
+			mod.UPPAY = 'https://jsypay.jiaobaowang.net/jsypay/wxpay/sys/WebPayServer.aspx'; //调起支付地址
 			break;
 		default:
 			break;
 	}
-	mod.BADGENUMBER = 'badgeNumber'//app角标
-	mod.PUBLICPARAMETER = 'publicParameter'//共用参数
+	mod.BADGENUMBER = 'badgeNumber' //app角标
+	mod.PUBLICPARAMETER = 'publicParameter' //共用参数
 	mod.ISFIRST = 'isFitst'; //是否是第一次登陆
 	mod.ICONNUM = 0; //角标数量
 	mod.PERSONALINFO = 'personalInfo1111'; //个人信息，登录成功后返回值
@@ -52,10 +50,10 @@ var storageKeyName = (function(mod) {
 	mod.COURSETYPE = "courseType";
 	mod.ISSHOWDETAILREADY = "isDetailReady"; //预加载是否完成
 	mod.VIEWCANCLICK = 'viewCanClick';
-	mod.SCIEDUREADED='sciedu-readed';//科教已读
-	mod.CUSTOMREQUESTTIME='customer-request-time';
+	mod.SCIEDUREADED = 'sciedu-readed'; //科教已读
+	mod.CUSTOMREQUESTTIME = 'customer-request-time';
 
-	mod.VIDEOSIZE = -1;//视频大小限制 -1为不限制   30 * 1024 * 1024 =30M
+	mod.VIDEOSIZE = -1; //视频大小限制 -1为不限制   30 * 1024 * 1024 =30M
 	mod.VIDEOLENGTH = 301; //视频时长限制 -1为不限制
 
 	mod.MAINHOMEWORKURLTEACHER = mod.MAINHOMEWORKURL + 'TeacherService.svc/'; //老师作业url
@@ -114,7 +112,7 @@ var storageKeyName = (function(mod) {
 	mod.CODERECORDVIDEO = 0; //录像
 	mod.CODEPLAYVIDEO = 1; //播放视频
 	//---Activity的code---end---
-	
+
 	/**
 	 * 在本地存永久数据
 	 * @param {Object} key

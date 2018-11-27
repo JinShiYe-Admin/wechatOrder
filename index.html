@@ -99,8 +99,13 @@
 			var tempModel = {};
 			var userPicker;
 			var grdClsPicker;
+			var index2Url = '';
 			window.onload = function() {
 				console.log('页面url:' + window.location.href);
+				var tempArr = window.location.href.split('?');
+				index2Url = tempArr[0];
+				index2Url = index2Url.replace('index.html', 'index2.html');
+				console.log('index2Url:'+index2Url);
 				orderDetailData.schoolID = getParam('schoolId');
 				//				orderDetailData.schoolID = '100255';
 				orderDetailData.schName = getParam('schoolName');
@@ -232,32 +237,38 @@
 						}
 					},
 					clickPay: function() {
-						//传递的参数
-						var tempArr = [];
-						tempArr.push(orderDetailData.telePhone); //订购的电话号码
-						tempArr.push(orderDetailData.orderID); //套餐代码
-						tempArr.push(orderDetailData.month); //订购总月数
-						tempArr.push(orderDetailData.totalFee); //订购花费
-						tempArr.push(orderDetailData.schoolID); //学校ID
-						tempArr.push(orderDetailData.clsID); //班级ID
-						tempArr.push(orderDetailData.stuID); //学生ID，学生ID,如果是添加的学生时填写0
-						tempArr.push(orderDetailData.stuName); //学生名称，学生名称,必填,不超过10个字
-						tempArr.push(Math.random()); //随机数
-						var tempStr = tempArr.join('~');
-						var tempModel000 = {
-							body: orderDetailData.serviceName, //商品名称
-							attach: '', //附加描述,最好填写,以区分
-							total_fee: orderDetailData.totalFee, //商品总价,人民币商品总价,以分为单位
-							goods_tag: '', //商品标签,商品分类标签,根据实际情况填写
-							rdir: window.storageKeyName.RETURNURL, //回调页面地址,填写回调的处理页面
-							rdata: tempStr //回调参数,填写回调的参数
+						var phoneDiv = document.getElementById("inputTelephone");
+						if(isPoneAvailable(phoneDiv.value)&&phoneDiv.value.length == 11) {
+							//传递的参数
+							var tempArr = [];
+							tempArr.push(orderDetailData.telePhone); //订购的电话号码
+							tempArr.push(orderDetailData.orderID); //套餐代码
+							tempArr.push(orderDetailData.month); //订购总月数
+							tempArr.push(orderDetailData.totalFee); //订购花费
+							tempArr.push(orderDetailData.schoolID); //学校ID
+							tempArr.push(orderDetailData.clsID); //班级ID
+							tempArr.push(orderDetailData.stuID); //学生ID，学生ID,如果是添加的学生时填写0
+							tempArr.push(orderDetailData.stuName); //学生名称，学生名称,必填,不超过10个字
+							tempArr.push(Math.random()); //随机数
+							var tempStr = tempArr.join('~');
+							var tempModel000 = {
+								body: orderDetailData.serviceName, //商品名称
+								attach: '', //附加描述,最好填写,以区分
+								total_fee: orderDetailData.totalFee, //商品总价,人民币商品总价,以分为单位
+								goods_tag: '', //商品标签,商品分类标签,根据实际情况填写
+								rdir: index2Url, //回调页面地址,填写回调的处理页面
+								rdata: tempStr //回调参数,填写回调的参数
+							}
+							var url = window.storageKeyName.UPPAY + '?v=' + Math.random() + '&body=' + tempModel000.body + '&attach=' + tempModel000.attach + '&rdata=' + tempModel000.rdata + '&total_fee=' + tempModel000.total_fee + '&goods_tag=' + tempModel000.goods_tag + '&rdir=' + tempModel000.rdir;
+							console.log('url:' + url);
+							mui.openWindow({
+								url: url,
+								id: 'WebPayServer.aspx' + Math.random()
+							});
+						} else {
+							document.activeElement.blur();
+							mui.toast('请输入正确的手机号码');
 						}
-						var url = window.storageKeyName.UPPAY + '?v=' + Math.random() + '&body=' + tempModel000.body + '&attach=' + tempModel000.attach + '&rdata=' + tempModel000.rdata + '&total_fee=' + tempModel000.total_fee + '&goods_tag=' + tempModel000.goods_tag + '&rdir=' + tempModel000.rdir;
-						console.log('url:' + url);
-						mui.openWindow({
-							url: url,
-							id: 'WebPayServer.aspx' + Math.random()
-						});
 					}
 				}
 			});
@@ -279,7 +290,7 @@
 							if(isPoneAvailable(summary)) {
 								getUserBusFunc();
 								console.log('发送请求协议');
-							}else{
+							} else {
 								document.activeElement.blur();
 								mui.toast('请输入正确的手机号码');
 							}
