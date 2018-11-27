@@ -112,12 +112,14 @@
 			//获取支付结果
 			var getPayResult = function() {
 				$.showLoading("数据加载中");
+				var url = window.storageKeyName.PAYTESULT;
 				var data0 = {
 //					out_trade_no: 'Wx135280220220181127091001107' //订单编号
 					out_trade_no: orderNum //订单编号
 				}
+				console.log('url:'+url+',orderNum:'+orderNum);
 				var xhr = new XMLHttpRequest();
-				xhr.open("post", window.storageKeyName.PAYTESULT, true);
+				xhr.open("post", url, true);
 				xhr.timeout = 10000; //10秒超时
 				xhr.contentType = 'application/json;';
 				xhr.onload = function(e) {
@@ -127,11 +129,14 @@
 						console.log("payResult" + data)
 						if(data1.RspCode == 0 && data1.RspData.qrurl == 'SUCCESS') {
 							console.log('payResult success');
+//							alert('0001');
 							getUserBusFunc();
 						} else {
+//							alert('0002');
 							getPayResult();
 						}
 					} else {
+//						alert('0003');
 						getPayResult();
 					}
 				}
@@ -143,7 +148,10 @@
 				xhr.onerror = function(e) {
 					$.hideLoading();
 					console.log("XHRP:onerror111:", e);
-					getPayResult();
+//					getPayResult();
+   					orderResultData.orderFlag = 1;
+   					$('#div112').show();
+   					$('#div111').hide();
 				};
 				xhr.send(JSON.stringify(data0));
 			}
@@ -196,12 +204,15 @@
 				//发送网络请求，data为网络返回值
 				postDataEncry('UserQRFee', enData1, comData1, 0, function(data1) {
 					console.log('UserQRFee:' + JSON.stringify(data1));
+//					alert('0004');
 					$.hideLoading();
 					if(data1.RspCode == 0) {
+//						alert('0005');
 						orderResultData.orderFlag = 0;
 						$('#div111').show();
 						$('#div112').hide();
 					} else {
+//						alert('0006');
 						orderResultData.orderFlag = 1;
 						mui.toast(data1.RspTxt);
 						$('#div112').show();
