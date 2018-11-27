@@ -279,6 +279,9 @@
 							if(isPoneAvailable(summary)) {
 								getUserBusFunc();
 								console.log('发送请求协议');
+							}else{
+								document.activeElement.blur();
+								mui.toast('请输入正确的手机号码');
 							}
 						}
 					} else {

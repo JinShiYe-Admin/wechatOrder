@@ -17,7 +17,8 @@ var storageKeyName = (function(mod) {
 		case 0: //开发
 			mod.USERTYPE = 0;//用户类型，0老师,1家长,2学生
 			mod.INTERFACEGU = 'https://jsypay.jiaobaowang.net/useradminwebapi/api/data/';//顾工接口
-			mod.RETURNURL = 'https://jsypay.jiaobaowang.net/jsystupay/index2.html';//返回地址，index2路径
+//			mod.RETURNURL = 'http://192.168.1.203:8080/wechatOrder/index2.html';//返回地址，index2路径
+			mod.RETURNURL = 'http://baidu.com';//返回地址，index2路径
 			mod.PAYTESULT = 'http://jsypay.jiaobaowang.net/jsypay/wxpay/sys/PcQRCode.aspx';//获取支付结果地址
 			mod.UPPAY = 'https://jsypay.jiaobaowang.net/jsypay/wxpay/sys/WebPayServer.aspx';//调起支付地址
 			break;
