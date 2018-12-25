@@ -79,7 +79,10 @@
 				console.log('selfValue:' + selfValue + ',orderNum:' + orderNum + ',orderResult:' + orderResult);
 				if(orderResult == "get_brand_wcpay_request:ok") {
 //					alert('0000');
-					getPayResult();
+//					getPayResult();
+					orderResultData.orderFlag = 0;
+					$('#div111').show();
+					$('#div112').hide();
 				} else if(orderResult == "get_brand_wcpay_request:cancel") {
 					mui.toast('支付过程中用户取消');
 					orderResultData.orderFlag = 1;
