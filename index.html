@@ -74,12 +74,11 @@
 		</div>
 
 		<script src="js/mui.min.js"></script>
-		<script src="js/libs/vconsole.min.js"></script>
 		<script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
 		<script src="https://cdn.bootcss.com/jquery-weui/1.2.1/js/jquery-weui.min.js"></script>
-
 		<script src="js/libs/vue.js"></script>
 		<script src="js/libs/storageKeyName.js"></script>
+		<script src="js/libs/vconsole.min.js"></script>
 		<!--加密-->
 		<script src="js/libs/RSA/Barrett.js" charset="utf-8"></script>
 		<script src="js/libs/RSA/BigInt.js" charset="utf-8"></script>
@@ -107,7 +106,7 @@
 				index2Url = index2Url.replace('index.html', 'index2.html');
 				console.log('index2Url:' + index2Url);
 				orderDetailData.schoolID = getParam('schoolId');
-				//				orderDetailData.schoolID = '100005';
+//								orderDetailData.schoolID = '100005';
 				orderDetailData.schName = getParam('schoolName');
 				orderDetailData.serviceName = getParam('serviceName');
 				orderDetailData.totalFee = getParam('totalfee') * 100;
@@ -322,9 +321,9 @@
 					servid: orderDetailData.orderID, //套餐代码
 					servm: orderDetailData.month, //订购总月数
 					feem: orderDetailData.totalFee, //订购花费
-					//					servid: 0, //套餐代码
-					//					servm: 1, //订购总月数
-					//					feem: 1, //订购花费
+//										servid: 0, //套餐代码
+//										servm: 1, //订购总月数
+//										feem: 1, //订购花费
 					dnote: '', //订购备注
 					recutname: '', //操作者姓名
 					frmtype: 'APP自订', //操作类型，来自APP代订,PC代订,APP自订,PC自订
@@ -347,7 +346,7 @@
 							body: orderDetailData.serviceName, //商品名称
 							attach: '', //附加描述,最好填写,以区分
 							total_fee: orderDetailData.totalFee, //商品总价,人民币商品总价,以分为单位
-							//							total_fee: 1, //商品总价,人民币商品总价,以分为单位
+//														total_fee: 1, //商品总价,人民币商品总价,以分为单位
 							goods_tag: '', //商品标签,商品分类标签,根据实际情况填写
 							rdir: index2Url, //回调页面地址,填写回调的处理页面
 							rdata: orderDetailData.telePhone //回调参数,填写回调的参数
@@ -357,7 +356,7 @@
 						if(window.storageKeyName.PAYFLAG == 0) {
 							url = window.storageKeyName.UPPAYSINGLE + '?v=' + Math.random() + '&appid=' + tempModel000.appid + '&payno=' + tempModel000.payno + '&body=' + tempModel000.body + '&attach=' + tempModel000.attach + '&rdata=' + tempModel000.rdata + '&total_fee=' + tempModel000.total_fee + '&goods_tag=' + tempModel000.goods_tag + '&rdir=' + tempModel000.rdir;
 						} else {
-							url = window.storageKeyName.UPPAYMORE + '?v=' + Math.random() + '&appid=' + tempModel000.appid + '&payno=' + tempModel000.payno + '&body=' + tempModel000.body + '&attach=' + tempModel000.attach + '&rdata=' + tempModel000.rdata + '&total_fee=' + tempModel000.total_fee + '&goods_tag=' + tempModel000.goods_tag + '&rdir=' + tempModel000.rdir + '&appid=' + window.storageKeyName.PAYAPPID;
+							url = window.storageKeyName.UPPAYMORE + '?v=' + Math.random() + '&appid=' + tempModel000.appid + '&payno=' + tempModel000.payno + '&body=' + tempModel000.body + '&attach=' + tempModel000.attach + '&rdata=' + tempModel000.rdata + '&total_fee=' + tempModel000.total_fee + '&goods_tag=' + tempModel000.goods_tag + '&rdir=' + tempModel000.rdir;
 						}
 						console.log('url:' + url);
 						mui.openWindow({
