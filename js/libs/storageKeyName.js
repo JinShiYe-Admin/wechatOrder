@@ -1,7 +1,7 @@
 //此js用于保存本地存储时，用到的key值
 
 var storageKeyName = (function(mod) {
-	mod.key = 0; //0,开发;1，测试，999必须为正式环境
+	mod.key = 999; //0,开发;1，测试，999必须为正式环境
 	var exLog = console.log;
 	console.log = function(hint, object) {
 		if(mod.key === 0) {
@@ -26,12 +26,13 @@ var storageKeyName = (function(mod) {
 		case 999: //部署外网
 			//地址必须都为https
 			mod.USERTYPE = 0; //用户类型，0老师,1家长,2学生
-			mod.INTERFACEGU = 'https://zhxy.jiaobaowang.net:8515/schadminwebapi/api/data/'; //顾工接口
+			mod.INTERFACEGU = 'https://jsypay.jiaobaowang.net/useradminwebapi/api/data/'; //顾工接口
 			mod.PAYTESULT = 'https://jsypay.jiaobaowang.net/jsypay/wxpay/sys/PcQRCode.aspx'; //获取支付结果地址
-			mod.UPPAYSINGLE = 'https://jsypay.jiaobaowang.net/jsypay/wxpay/sys/WebPayServer.aspx'; //调起支付地址--单商家入驻
-			mod.UPPAYMORE = 'https://jsypay.jiaobaowang.net/jsypaym/wxpay/sys/WebPayServer.aspx'; //调起支付地址--多商家入驻
-			mod.PAYFLAG = '0'; //多商家入驻1，单商家0
+			mod.UPPAYSINGLE = 'https://jsypay.jiaobaowang.net/jsypay/wxpay/sys/WebPayServerNo.aspx'; //调起支付地址--单商家入驻
+			mod.UPPAYMORE = 'https://jsypay.jiaobaowang.net/jsypaym/wxpay/sys/WebPayServerNo.aspx'; //调起支付地址--多商家入驻
+			mod.PAYFLAG = '1'; //多商家入驻1，单商家0
 			mod.PAYAPPID = 'wxf9b41cac260dd423'; //多商家入驻时的appid
+			mod.GETORDERID = 'https://jsypay.jiaobaowang.net/jsypaym/wxpay/sys/WebOutPayNo.aspx'; //获取订单号
 			break;
 		default:
 			break;
