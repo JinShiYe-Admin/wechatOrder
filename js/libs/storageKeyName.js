@@ -1,7 +1,7 @@
 //此js用于保存本地存储时，用到的key值
 
 var storageKeyName = (function(mod) {
-	mod.key = 999; //0,开发;1，测试，999必须为正式环境
+	mod.key = 0; //0,开发;1，测试，999必须为正式环境
 	var exLog = console.log;
 	console.log = function(hint, object) {
 		if(mod.key === 0) {
